@@ -1,13 +1,13 @@
 package files.activity.entities;
 
-public class Products {
+public class Product {
     private String name;
     private Double price;
     private Integer stock;
 
-    public Products() {}
+    public Product() {}
 
-    public Products(String name, Double price, Integer stock) {
+    public Product(String name, Double price, Integer stock) {
         this.name = name;
         this.price = price;
         this.stock = stock;

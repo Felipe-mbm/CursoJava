@@ -1,54 +1,61 @@
 package files.activity.application;
 
-import files.activity.entities.Products;
+import files.activity.entities.Product;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class Program {
     public static void main(String[] args) {
 
-        Scanner scan = new Scanner(System.in);
-        String strPath = scan.nextLine();
+        Scanner sc = new Scanner(System.in);
 
-        List<Products> list = new ArrayList<>();
+        List<Product> list = new ArrayList<>();
 
-        // Make the product and add to list
-        try (BufferedReader br = new BufferedReader(new FileReader(strPath))) {
-            int cont = 0;
-            while (br.readLine() != null) {
-                cont++;
+        System.out.println("Enter file path: ");
+        String sourceFileStr = sc.nextLine();
+
+        File sourceFile = new File(sourceFileStr);
+        String sourceFolderStr = sourceFile.getParent();
+
+        boolean success = new File(sourceFolderStr + "/out").mkdir();
+
+        String targetFileStr = sourceFolderStr + "/out/summary.csv";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(sourceFileStr))) {
+
+            String itemCsv = br.readLine();
+            while (itemCsv != null) {
+
+                String[] fields = itemCsv.split(",");
+                String name = fields[0];
+                double price = Double.parseDouble(fields[1]);
+                int quantity = Integer.parseInt(fields[2]);
+
+                list.add(new Product(name, price, quantity));
+
+                itemCsv = br.readLine();
             }
 
-            String[] pieces = new String[line];
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(targetFileStr, true))) {
 
-            for (int i = 0; i <= line; i++) {
-                pieces[i] = Arrays.toString(br.readLine().split("\n"));
+                for (Product item : list) {
+                    bw.write(item.getName() + "," + String.format("%.2f", item.stockPrice()));
+                    bw.newLine();
+                }
+
+                System.out.println(targetFileStr + " CREATED!");
+
+            } catch (IOException e) {
+                System.out.println("Error writing file: " + e.getMessage());
             }
 
-            for (int i = 0; i <= pieces.length; i++) {
-                System.out.println(pieces[i]);
-            }
-
-            for (String piece : pieces) {
-                String[] data = piece.split(",");
-
-                String name = data[0];
-                Double price = Double.parseDouble(data[1]);
-                Integer stock = Integer.parseInt(data[2]);
-
-                list.add(new Products(name, price, stock));
-
-                System.out.println("List" + piece);
-            }
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
         }
-        catch (IOException e) {
-            System.out.println("error: " + e.getMessage());
-        }
 
-        scan.close();
+        sc.close();
     }
 }
