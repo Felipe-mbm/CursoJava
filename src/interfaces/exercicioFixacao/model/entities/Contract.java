@@ -1,6 +1,8 @@
 package interfaces.exercicioFixacao.model.entities;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Contract {
 
@@ -8,13 +10,12 @@ public class Contract {
     private LocalDate date;
     private Double totalValue;
 
-    private Installment installments;
+    private List<Installment> instalments = new ArrayList<>();
 
-    public Contract(Integer number, LocalDate date, Double totalValue, Installment installments) {
+    public Contract(Integer number, LocalDate date, Double totalValue) {
         this.number = number;
         this.date = date;
         this.totalValue = totalValue;
-        this.installments = installments;
     }
 
     public Integer getNumber() {
@@ -41,11 +42,7 @@ public class Contract {
         this.totalValue = totalValue;
     }
 
-    public Installment getInstallments() {
-        return installments;
-    }
-
-    public void setInstallments(Installment installments) {
-        this.installments = installments;
+    public List<Installment> getInstallments() {
+        return instalments;
     }
 }
